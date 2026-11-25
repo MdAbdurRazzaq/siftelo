@@ -1,0 +1,84 @@
+# ACTIVE, MANUAL ONLY. Activated in TRC-017 after owner approval. It runs only when started by hand from the
+# Actions tab (workflow_dispatch). Hosted results are recorded in the TRC-017 evidence report, not in this file.
+#
+# Purpose: manually triggered compatibility validation on GitHub-hosted runners.
+#   Python 3.11, 3.12 and 3.13 on ubuntu-latest and windows-latest (6 jobs).
+# Triggers: workflow_dispatch only. There is no push or pull_request trigger.
+# Permissions: contents: read. No secrets, no deployment or publication credentials.
+# No artifact upload and no cache. Results are read from the job logs.
+# Each job logs the runtime versions, the unit test counts and the distribution SHA-256 checksums.
+#
+# Pinned actions (full commit SHAs, release tags as comments):
+#   actions/checkout v7.0.1 (node24)      3d3c42e5aac5ba805825da76410c181273ba90b1
+#   actions/setup-python v7.1.0 (node24)  6d4fd22b20465ccc0f7354476588e8df7c9ca0e0
+# Scope of the action review (TRC-016B): the bundled entry points dist/index.js (checkout),
+# dist/setup/index.js and dist/cache-save/index.js (setup-python) and their @actions/* dependencies were
+# inspected statically. The bundles were not built from source here and were not executed. Owner review of the
+# action code at these commits is still required before activation.
+#
+# Build backend: setuptools 84.2.1, installed from PyPI with hash checking (wheel sha256 ca140b45...), binary only.
+# The advisories affecting earlier releases (80.9.0 and others) are fixed in 84.1.0 and later.
+
+name: ci-manual-validation
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-manual-validation-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    name: validate (${{ matrix.os }}, Python ${{ matrix.python-version }})
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 20
+    permissions:
+      contents: read
+    strategy:
+      fail-fast: false
+      max-parallel: 3
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        python-version: ["3.11", "3.12", "3.13"]
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1   # v7.0.1
+        with:
+          persist-credentials: false
+          fetch-depth: 1
+
+      - name: Set up Python
+        uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0   # v7.1.0
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Record runtime versions
+        run: |
+          echo "runner image: ${ImageOS:-unknown} ${ImageVersion:-unknown}"
+          echo "os: ${{ matrix.os }}"
+          python --version
+          python -c "import platform, sys; print('platform:', platform.platform()); print('executable:', sys.executable)"
+          python -m pip --version
+          git --version
+
+      - name: Install the build backend (setuptools 84.2.1, hash-checked, binary only)
+        run: |
+          printf '%s\n' "setuptools==84.2.1 --hash=sha256:ca140b45d5325a9478f880e351484f62fef15f336462e449ca0c03c873d589c2 --hash=sha256:3ff8b3b5492a0aa66960f4419365a86b84e013070d4313e4d4a6894f5d64d6bc" > build-requirements.txt
+          python -m pip install --only-binary=:all: --require-hashes --no-deps --disable-pip-version-check -r build-requirements.txt
+          python -c "import setuptools as s; v = tuple(int(x) for x in s.__version__.split('.')[:2]); print('setuptools', s.__version__); assert v >= (84, 1), 'setuptools below 84.1.0 is refused'"
+
+      - name: Run the CI driver (regression tests, packaging, offline install, CLI demonstrations)
+        run: python beta/proposed-ci/ci_check.py --artifacts "$RUNNER_TEMP/siftelo-artifacts"
+
+      - name: Record distribution checksums
+        run: |
+          echo "SHA-256 checksums written by the driver:"
+          cat "$RUNNER_TEMP/siftelo-artifacts/SHA256SUMS.txt"

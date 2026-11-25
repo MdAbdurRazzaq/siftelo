@@ -31,7 +31,9 @@ python -m siftelo --project-root <path-to-repo> --handoff <handoff.md>
 ## 3. Install from a wheel (offline)
 
 Build the wheel from the source tree. The build below uses the `setuptools` already installed in the
-interpreter, so it needs no network access. The release candidate was built with `setuptools` 80.9.0.
+interpreter, so it needs no network access. Check that it is 84.1.0 or newer, the minimum in `pyproject.toml`:
+`python -c "import setuptools; print(setuptools.__version__)"`. The current release build uses `setuptools` 84.2.1.
+Earlier candidates were built with 80.9.0, which has known advisories, and are superseded.
 
 ```powershell
 python -m pip wheel . --no-deps --no-build-isolation -w dist

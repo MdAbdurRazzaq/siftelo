@@ -1,6 +1,6 @@
-"""Proposed CI driver for Siftelo. PROPOSED, NOT ACTIVE.
+"""CI driver for Siftelo. Run by .github/workflows/ci-manual-validation.yml (manual trigger only).
 
-It is run by beta/proposed-ci/github-actions-ci.yml only after the owner has approved that workflow. It is
+It is run by that workflow, and can also be run locally. It is
 written to behave the same on Windows and Linux:
 
 - every external command is a list of arguments run without a shell;
@@ -184,7 +184,7 @@ def check_demos(sdist_root: Path, work: Path, artifacts: Path, siftelo_cmd: Path
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="Siftelo proposed CI driver (not active).")
+    parser = argparse.ArgumentParser(description="Siftelo CI driver.")
     parser.add_argument("--artifacts", required=True, type=Path,
                         help="new or empty directory that receives the distributions and reports")
     parser.add_argument("--source-date-epoch", default=None,

@@ -12,7 +12,7 @@ Status: licence **Apache-2.0** (owner-approved). Copyright notice **`Copyright 2
 | Copyright notice | `Copyright 2026 Marsh`, in the `NOTICE` file and the README | owner-approved (TRC-014A) |
 | Notice file | `NOTICE` in the project root; shipped in the wheel (`dist-info/licenses/`) and the sdist | this release |
 | Package metadata | `license = "Apache-2.0"` and `license-files = ["LICENSE", "NOTICE"]` in `pyproject.toml` (PEP 639) | this release |
-| Build backend minimum | `setuptools>=77`, the first release that accepts the expression above | this release |
+| Build backend minimum | `setuptools>=84.1.0`: 77 is the first release that accepts the expression above; 84.1.0 is the first release outside the advisories affecting earlier versions (TRC-016B) | this release |
 | Intended copyright ownership | Personal. `Marsh` is the owner's public developer alias. | owner's statement |
 | Rights and provenance confirmation | **Good-faith confirmation** by the owner (section 5) | owner |
 

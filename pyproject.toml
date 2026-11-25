@@ -1,7 +1,9 @@
 [build-system]
 # setuptools 77 is the first release that accepts the PEP 639 `license` expression below.
-# The release candidate was built with setuptools 80.9.0 (see beta/CI-PLAN.md).
-requires = ["setuptools>=77"]
+# The minimum is 84.1.0: releases from 38.2.2 up to 84.1.0 are affected by GHSA-xmj3-9gf7-h52w, and
+# releases before 83.0.0 (including the earlier 80.9.0 pin) by GHSA-h35f-9h28-mq5c / CVE-2026-59890.
+# Release builds use setuptools 84.2.1 (see beta/CI-PLAN.md).
+requires = ["setuptools>=84.1.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
