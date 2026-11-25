@@ -7,12 +7,17 @@ Siftelo is a small, **read-only** command-line preflight. It answers one questio
 > Does this Markdown handoff still match the real Git repository?
 
 It reads the handoff, an optional JSON manifest and the repository. It reports each factual
-reference with a conservative status and an overall outcome. It never runs project tests, never
-writes to the repository or to any other file, and never executes programs supplied by the
-repository. It uses only the Python standard library.
+reference with a conservative status and an overall outcome. It is designed not to run project tests,
+not to write to the repository or to any other file, and not to run commands or programs supplied by the
+repository; it runs only a fixed set of read-only Git commands (see `beta/SECURITY-GUIDANCE.md`). The test suite
+checks these behaviours for the cases it covers. It uses only the Python standard library.
 
-**Status: 0.1.0 beta candidate.** Not released. Tested on Windows 11 (Python 3.13.3, Git 2.52.0)
-and on Linux (Python 3.13.5, Git 2.47.3, reported by an independent review). See "Tested and
+**New here?** Start with [`beta/START-HERE-SIFTELO.md`](beta/START-HERE-SIFTELO.md): install, a synthetic
+demonstration and the expected results, for Windows and Linux.
+
+**Status: 0.1.0 early public beta.** Distributed as a wheel and a source distribution with the GitHub
+release. Not on PyPI. Tested on Windows 11 (Python 3.13.3, Git 2.52.0), on GitHub-hosted Windows and Linux
+runners with Python 3.11, 3.12 and 3.13, and on Linux by an independent review. See "Tested and
 untested" below.
 
 **Not a sandbox.** Siftelo reduces specific risks it has tested. It does not make an untrusted
@@ -20,16 +25,29 @@ repository safe to open, and a result is not a security decision or an approval.
 
 ## Install
 
-From a wheel built from this source (no network needed once `setuptools` is installed):
+From the GitHub release (recommended). Check both the wheel and the source distribution against `SHA256SUMS.txt`
+first, then install the wheel into a new virtual environment with no network access.
+
+Windows (PowerShell):
 
 ```powershell
-python -m pip wheel . --no-deps --no-build-isolation -w dist
+Get-FileHash -Algorithm SHA256 .\siftelo-0.1.0-py3-none-any.whl, .\siftelo-0.1.0.tar.gz
 python -m venv .venv
-.venv\Scripts\python.exe -m pip install --no-index --no-deps dist\siftelo-0.1.0-py3-none-any.whl
-.venv\Scripts\siftelo.exe --version
+.\.venv\Scripts\python.exe -m pip install --no-index --no-deps .\siftelo-0.1.0-py3-none-any.whl
+.\.venv\Scripts\siftelo.exe --version
 ```
 
-The full guide, including the no-install route, is `beta/INSTALLATION.md` in the source tree.
+Linux (bash):
+
+```bash
+sha256sum siftelo-0.1.0-py3-none-any.whl siftelo-0.1.0.tar.gz
+python3 -m venv .venv
+.venv/bin/python -m pip install --no-index --no-deps ./siftelo-0.1.0-py3-none-any.whl
+.venv/bin/siftelo --version
+```
+
+Expected output of the version command: `siftelo 0.1.0`. The full walk-through is `beta/START-HERE-SIFTELO.md`;
+the full install guide, including the source-tree route and troubleshooting, is `beta/INSTALLATION.md`.
 
 ## Run
 
@@ -56,7 +74,7 @@ siftelo --project-root <repo> --handoff <handoff.md> [--manifest <manifest.json>
 | 3 | `review_required` | nothing contradicted, but items are unknown, unverified, pending or blocked |
 
 Both output formats carry a `readiness` object with `verified_readiness: false` and
-`authorizes_actions: false`. Siftelo never certifies readiness and never authorises an action.
+`authorizes_actions: false`. Siftelo does not certify readiness and does not authorise an action.
 
 ## Statuses
 
@@ -70,13 +88,23 @@ Both output formats carry a `readiness` object with `verified_readiness: false` 
 
 ## Demonstration
 
-The source tree ships a builder for two synthetic repositories (see `beta/QUICKSTART.md`):
+The demonstration takes about five minutes and uses two made-up repositories. The builder is in the source
+distribution (`examples/`), not in the wheel, so extract `siftelo-0.1.0.tar.gz` first. The complete commands for
+Windows and Linux, with the expected exit code for each run, are in `beta/START-HERE-SIFTELO.md` (sections 4 and 5).
+
+In short (Windows, PowerShell, in the folder that holds the downloaded files and the virtual environment):
 
 ```powershell
-python examples\build_demo.py C:\siftelo-demo
+mkdir src
+tar -xzf .\siftelo-0.1.0.tar.gz -C .\src
+python .\src\siftelo-0.1.0\examples\build_demo.py .\demo
+python .\src\siftelo-0.1.0\examples\build_demo.py .\demo-stale --stale
+.\.venv\Scripts\siftelo.exe --project-root .\demo\interrupted-work --handoff handoff.md --manifest manifest.json
+.\.venv\Scripts\siftelo.exe --project-root .\demo-stale\interrupted-work --handoff handoff.md --manifest manifest.json
 ```
 
-The correct builds exit **3**. The `--stale` variant exits **1**.
+The correct build exits **3** (a person should review the listed items). The stale build exits **1** (a recorded
+fact no longer matches the repository). `beta/QUICKSTART.md` explains each step.
 
 ## Name and compatibility
 
@@ -100,22 +128,25 @@ identifiers in reports and test comments are kept as references.
 
 | item | status |
 |---|---|
-| Python | 3.13.3 (Windows 11) and 3.13.5 (Linux): **tested**. Python 3.11 and 3.12: declared (`>=3.11`), **untested**. |
-| Git | 2.52.0 (Windows 11) and 2.47.3 (Linux): **tested**. The 2.32 minimum is a design target, **untested**. Other versions untested. |
-| Operating systems | Windows 11: **tested**. Linux: **tested** by independent review (see below). macOS: **not run**. |
+| Python | 3.11, 3.12 and 3.13: **tested on GitHub-hosted runners** (Windows and Ubuntu; all six jobs passed). 3.13.3 (Windows 11) and 3.13.5 (Linux, independent review) locally. |
+| Git | 2.52.0 (Windows 11) and 2.47.3 (Linux): **tested**. Hosted runners used Git 2.56.1. The 2.32 minimum is a design target, **untested**. |
+| Operating systems | Windows 11 locally and Windows on GitHub-hosted runners: **tested**. Linux: **tested** on Ubuntu runners and by independent review. macOS: **not run**. |
 
 Test results by platform:
 
 - Windows 11, Python 3.13.3, Git 2.52.0: 227 tests, all passed.
 - Linux, Python 3.13.5, Git 2.47.3 (independent review, TRC-014A): 226 passed, 1 skipped (a
   Windows-specific test), 0 failures.
+- GitHub-hosted runs (manual run 45613575986 on commit `a83d15d`, TRC-017): Ubuntu and Windows, Python 3.11, 3.12
+  and 3.13. Each of the six jobs ran 227 tests and passed, and each ran the offline install and the eight CLI
+  demonstration checks.
 
 Both runs covered the extracted-sdist tests, the offline installation, the CI driver and the eight
 CLI demonstration checks (two synthetic examples, correct and stale builds, Markdown and JSON).
 
 ## Privacy and security
 
-- Siftelo has no network access and writes nothing. Its report can contain absolute local paths,
+- The source contains no network code, and Siftelo does not write files. Its report can contain absolute local paths,
   the branch name, changed file names (up to 200) and quoted handoff lines. Read `beta/PRIVACY.md`
   before you share a report.
 - Read `beta/SECURITY-GUIDANCE.md` before you point Siftelo at a repository you do not control.
@@ -152,5 +183,4 @@ distribution alongside `LICENSE`. The owner has given a good-faith confirmation 
 ## Scope
 
 A local proof of value for a beta. It does not include an MCP adapter, a database, a dashboard,
-cloud sync, test execution, or readiness certification. Package-registry and trademark checks are
-pending.
+cloud sync, test execution, or readiness certification. It is not published on PyPI.

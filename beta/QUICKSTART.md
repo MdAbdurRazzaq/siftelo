@@ -55,7 +55,7 @@ content changed). Each stale item names the value it expected and the value it f
 
 Look for four things:
 
-1. The `Readiness` section: `Verified readiness: no` and `Authorises actions: no`. These are always the values.
+1. The `Readiness` section: `Verified readiness: no` and `Authorises actions: no`. These values are fixed in this release.
 2. The `Findings`: each has a status (see `README.md`, "Statuses").
 3. The exit code: the table in `README.md` says what each code means.
 4. Siftelo writes nothing. The report is printed to the screen only, and the demonstration files are unchanged.

@@ -1,12 +1,12 @@
-# Siftelo 0.1.0 beta candidate: installation
+# Siftelo 0.1.0 early beta: installation
 
-Status: beta candidate. Not released, not published on any package index.
+Status: 0.1.0 early public beta. Distributed with the GitHub release. Not published on any package index.
 
 ## 1. Requirements
 
 | requirement | tested | declared or designed for | not tested |
 |---|---|---|---|
-| Python | 3.13.3 (Windows 11); 3.13.5 (Linux, independent review) | `>=3.11` (declared) | 3.11 and 3.12 |
+| Python | 3.13.3 (Windows 11); 3.13.5 (Linux, independent review); 3.11, 3.12 and 3.13 on GitHub-hosted Windows and Ubuntu runners | `>=3.11` (declared) | 3.11 and 3.12 on a local machine (hosted only) |
 | Git | 2.52.0 (Windows 11); 2.47.3 (Linux, independent review) | 2.32 or newer (design target; the trust boundary relies on features from 2.32) | every other version, including the 2.32 floor |
 | Operating system | Windows 11 and Linux (independent review) | Windows and Linux | macOS (not run) |
 | Dependencies | none | standard library only | none |
@@ -63,7 +63,7 @@ install from an unpacked source folder into a system-wide Python.
 
 ## 5. Check the files you received
 
-Compare each file with `SHA256SUMS.txt`, which the release candidate provides next to the distributions:
+Compare each file with `SHA256SUMS.txt`, which the release provides next to the distributions:
 
 ```powershell
 Get-FileHash -Algorithm SHA256 dist\siftelo-0.1.0-py3-none-any.whl
@@ -91,6 +91,8 @@ Or delete the virtual environment folder.
 
 ## 8. Troubleshooting
 
+| Symptom | What to do |
+|---|---|
 | Exit 3, and the report says the project root has no `.git` of its own | The folder is not the root of a Git repository (Siftelo does not search upward). Point `--project-root` at the folder that holds `.git`. |
 | Exit 2 | The handoff or manifest could not be processed (the report's `## Errors` section says why), or the command line was wrong (the usage message goes to stderr). |
 | The report shows Git-related items as `unknown` | Git could not be run or its output was refused. Confirm that `git --version` works in the same terminal. |

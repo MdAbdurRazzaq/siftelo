@@ -1,14 +1,14 @@
-# Siftelo 0.1.0 beta candidate: feedback instructions
+# Siftelo 0.1.0 early beta: feedback instructions
 
 Thank you for testing Siftelo. Feedback is most useful when it is specific and when it is safe to share.
 
 ## Where to send feedback
 
 Use **GitHub Issues** on this repository for non-sensitive feedback and bug reports. Do not put repository
-contents, secrets or personal data in an issue (see "What not to send" below).
+contents, secrets or personal data in an issue (see "What not to send" below). Choose the issue form that
+matches your report: bug, false positive or missed finding, or general feedback.
 
-For a private beta, the owner may agree a separate private channel with each tester. Use that channel only if you
-were given it. Security problems are not feedback: see `SECURITY.md`.
+Security problems are not feedback: see `SECURITY.md`.
 
 ## What to send
 
@@ -49,7 +49,7 @@ shared in full.
 ## Feedback template
 
 ```markdown
-Siftelo version: 0.1.0 (beta candidate)
+Siftelo version: 0.1.0 (early beta)
 Install route: source tree / wheel / other
 OS and version:
 Python version:

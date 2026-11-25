@@ -1,6 +1,7 @@
 # Siftelo: continuous-integration plan (active, manual trigger only)
 
-Status: the workflow is active in `.github/workflows/ci-manual-validation.yml` (TRC-017). It runs only when a
+Status: the workflow is in `.github/workflows/ci-manual-validation.yml` and has run once on GitHub-hosted runners
+(run 45613575986, all six jobs passed). It runs only when a
 person starts it from the Actions tab. It never runs on a push or a pull request. Nothing here publishes, uploads
 or tags anything.
 
@@ -10,8 +11,8 @@ or tags anything.
   and no cache.
 - `beta/proposed-ci/ci_check.py`: the driver that does every check. It is portable (Windows and Linux) and runs
   without a shell. It was run locally on Windows 11 (TRC-014, TRC-014A, TRC-016B, TRC-017). Linux results come from
-  an independent review of the TRC-014 candidate, not from this workspace. Hosted results are recorded in the
-  TRC-017 evidence report.
+  an independent review of the TRC-014 candidate, not from this workspace. The hosted result is run 45613575986
+  (listed in `README.md`, "Tested and untested").
 
 ## Goal
 
@@ -23,8 +24,8 @@ and does not replace human review.
 
 | Axis | Values | Why |
 |---|---|---|
-| OS | `windows-latest`, `ubuntu-latest` | Windows 11 (3.13.3) and Linux (3.13.5, independent review) have run the suite. The first hosted run is recorded in the TRC-017 report. |
-| Python | 3.11, 3.12, 3.13 | `requires-python >=3.11`. Only 3.13 has run in this workspace. 3.11 and 3.12 are untested until the hosted run. |
+| OS | `windows-latest`, `ubuntu-latest` | Windows 11 (3.13.3) and Linux (3.13.5, independent review) have run the suite. The hosted run (TRC-017) passed on Windows and Ubuntu runners. |
+| Python | 3.11, 3.12, 3.13 | `requires-python >=3.11`. All three passed on GitHub-hosted runners (TRC-017). Only 3.13 has been run on a local machine. |
 | Git | the runner's default Git | The tool needs Git 2.32 or newer by design. The floor is untested. |
 
 Six jobs in total. At most three run at once, and each job has a 20-minute timeout.
@@ -108,12 +109,12 @@ action code at these commits before activation.
 - It does not run any tool on a handoff from outside the repository.
 - It does not use secrets, caches or artifact uploads.
 
-## Open items before the plan can run
+## Open items
 
-- The repository is private and holds the accepted source commit. Activation was approved in TRC-017.
-- The owner must review the pinned action code (see above). Setuptools 84.2.1 is approved in TRC-016B.
-- The first hosted run (TRC-017) covers all six jobs. Each job's outcome is in the TRC-017 report. The
-  Linux result from the independent review does not replace a hosted run.
-- The workflow has not been parsed by a YAML tool. No YAML parser is installed, and installing one was not approved.
+- The owner must still review the pinned action code (see above) before the next hosted run. Setuptools 84.2.1 is
+  approved in TRC-016B.
+- The first hosted run (run 45613575986) passed all six jobs. The Linux result from the independent review is not
+  a hosted run.
+- GitHub parsed and ran the workflow in TRC-017. No local YAML parser has been run on it.
 - Generated setuptools metadata (`PKG-INFO`, `setup.cfg`, `*.egg-info`) stays in the sdist on purpose. It is normal
   setuptools output (TRC-013).

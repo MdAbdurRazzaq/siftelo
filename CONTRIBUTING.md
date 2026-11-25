@@ -1,6 +1,6 @@
 # Contributing to Siftelo
 
-Status: draft for the 0.1.0 beta. The owner enables GitHub Issues and pull requests before public release.
+Status: 0.1.0 early beta. GitHub Issues are open for feedback. Contributions follow the proposal-first rule below.
 
 ## Feedback and bug reports
 

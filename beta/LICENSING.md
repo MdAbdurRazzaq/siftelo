@@ -1,4 +1,4 @@
-# Siftelo 0.1.0 beta candidate: licensing, provenance and attribution
+# Siftelo 0.1.0 early beta: licensing, provenance and attribution
 
 Status: licence **Apache-2.0** (owner-approved). Copyright notice **`Copyright 2026 Marsh`** (owner-approved, TRC-014A).
 **Rights and provenance: good-faith confirmation by the owner** (section 5).
@@ -57,7 +57,7 @@ audit is a manual review.
 
 ## 5. Rights and provenance confirmation
 
-The owner has given a good-faith confirmation of rights and provenance for this release candidate. It covers the
+The owner has given a good-faith confirmation of rights and provenance for this release. It covers the
 owner's rights in the project's code, including work produced with AI assistance that the owner directed and
 reviewed, and the owner's understanding that no employer, client or other person holds rights in that code.
 

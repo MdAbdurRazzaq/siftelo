@@ -1,4 +1,4 @@
-# Siftelo 0.1.0 beta candidate: security guidance
+# Siftelo 0.1.0 early beta: security guidance
 
 ## 1. Read this first
 

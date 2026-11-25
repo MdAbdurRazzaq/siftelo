@@ -1,7 +1,6 @@
-# Siftelo 0.1.0 beta candidate: privacy statement
+# Siftelo 0.1.0 early beta: privacy statement
 
-This statement describes what the Siftelo software does with data. It describes the code in this release
-candidate, as tested on Windows 11 with Python 3.13.3 and Git 2.52.0. It is not a legal privacy notice for any
+This statement describes what the Siftelo software does with data. It describes the code in this release, as tested on Windows 11 with Python 3.13.3 and Git 2.52.0. It is not a legal privacy notice for any
 service, and no service operated by the project exists.
 
 ## 1. Summary
@@ -67,17 +66,18 @@ A redaction option is not in this release (see LIMITATIONS, L-13).
 
 - Feedback about the software does not need repository content. Describe the problem with a synthetic example,
   or with a redacted report. See `FEEDBACK.md`.
-- The project does not yet have a feedback channel or a contact address. Nothing in this release sends your
-  feedback anywhere. The owner decides how feedback is collected (see the release checklist).
+- Feedback reaches the project only if you post it yourself, for example as a GitHub issue. Nothing in Siftelo
+  sends anything to any service.
 
 ## 7. Personal data in the project documents
 
 The project documents and the package do not contain the owner's personal contact details, home address or
 private identifiers. The copyright notice is `Copyright 2026 Marsh`, the owner's public developer alias (see `NOTICE`). The
-development records in the repository's historical archives contain local paths from the owner's machine. They
-are not part of the source distribution and the wheel, and should not be published as they are.
+development records kept outside this repository contain local paths from the owner's machine. They are not part of
+the source distribution, the wheel or the repository history, and they are not published. The repository history
+was checked on 2026-11-25 for local paths, credentials and client references; none was found.
 
 ## 8. Changes
 
-This statement applies to the 0.1.0 beta candidate. If the software starts to send data, store data or call
+This statement applies to the 0.1.0 early beta. If the software starts to send data, store data or call
 a network service, this statement must be revised before that release.
