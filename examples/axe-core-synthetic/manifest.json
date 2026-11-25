@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "repository": {
+    "expected_head": "{{HEAD}}",
+    "expected_branch": "audit/synthetic-axe-run"
+  },
+  "evidence": [
+    {"path": "reports/axe-run.json", "sha256": "{{SHA_REPORT}}", "label": "axe-core run output"},
+    {"path": "reports/summary.md", "label": "human summary"}
+  ],
+  "approvals": [
+    {"id": "publication", "description": "Post audit summary publicly", "status": "pending"}
+  ],
+  "claims": [
+    {"id": "scan-green", "text": "Scan reported green (agent-reported; not re-executed)", "status": "agent_reported"}
+  ]
+}

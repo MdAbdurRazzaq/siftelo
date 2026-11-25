@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "repository": {
+    "expected_head": "{{HEAD}}",
+    "expected_branch": "feature/parser-refactor"
+  },
+  "evidence": [
+    {"path": "docs/notes/step2-fixtures.md", "label": "step 2 notes", "sha256": "{{SHA_STEP2}}"},
+    {"path": "docs/notes/perf-baseline.txt", "label": "baseline timings"}
+  ],
+  "approvals": [
+    {"id": "publication", "description": "Publish refactor branch to the public remote", "status": "pending"}
+  ],
+  "claims": [
+    {"id": "tests-before-interruption", "text": "Tests passed before the interruption (agent-reported, unexecuted here)", "status": "agent_reported"}
+  ]
+}

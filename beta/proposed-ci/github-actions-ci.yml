@@ -1,0 +1,61 @@
+# PROPOSED, NOT ACTIVE. This file is not a workflow. It takes effect only if it is copied to
+# .github/workflows/ci.yml in a repository the owner has created and approved. It was not run.
+#
+# All checks are in beta/proposed-ci/ci_check.py, which is portable and uses no shell.
+#
+# Before enabling, the owner must:
+#   1. Review the code of each pinned action commit before activation (checkout v4.4.0, setup-python v5.6.0,
+#      upload-artifact v4.6.2). The SHAs were read from GitHub's public API; the owner has not reviewed them.
+#   2. Approve the one install step below (setuptools==80.9.0 from the package index at run time).
+#      The workflow also uses the network in its actions (checkout, setup-python, which provisions Python on the
+#      runner, and upload-artifact). The build and the offline wheel install do not use the network.
+#   3. Run the matrix on a hosted runner before trusting it. The independent Linux review (TRC-014A) is not a hosted run.
+
+name: ci
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: test (${{ matrix.os }}, Python ${{ matrix.python-version }})
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-latest, ubuntu-latest]
+        python-version: ["3.11", "3.12", "3.13"]
+
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262   # v4.4.0
+        with:
+          persist-credentials: false
+
+      - name: Set up Python
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065   # v5.6.0
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Record runtime versions
+        run: python --version
+
+      - name: Install the pinned build backend   # OWNER APPROVAL REQUIRED (see CI-PLAN.md)
+        run: python -m pip install "setuptools==80.9.0"
+
+      - name: Run the CI driver
+        run: python beta/proposed-ci/ci_check.py --artifacts "${{ runner.temp }}/siftelo-artifacts"
+
+      - name: Upload build outputs (Ubuntu, Python 3.13 only)
+        if: matrix.os == 'ubuntu-latest' && matrix.python-version == '3.13'
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02   # v4.6.2
+        with:
+          name: siftelo-dist
+          path: ${{ runner.temp }}/siftelo-artifacts
+          retention-days: 14
